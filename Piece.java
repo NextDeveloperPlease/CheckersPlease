@@ -1,11 +1,11 @@
 import javafx.scene.control.Button;
-import javafx.scene.shape.Circle;
 
 public class Piece extends Button {
-    Circle piece;
-    String color;
+    private String color;
+    private boolean isVisible;
+    int i, j;
 
-    public Piece() {
+    public Piece(int i, int j) {
         this.setStyle(
             "-fx-background-radius: 5em; " +
             "-fx-min-width: 80px; " +
@@ -13,7 +13,8 @@ public class Piece extends Button {
             "-fx-max-width: 80px; " +
             "-fx-max-height: 80px;"
         );
-
+        this.i = i;
+        this.j = j;
 
     }
 
@@ -30,5 +31,18 @@ public class Piece extends Button {
 
     public String getColor() {
         return color;
+    }
+
+    public void initVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
+    public boolean getVisibility() {
+        return isVisible;
+    }
+
+    public int[] getPosition() {
+        int[] result = {i, j};
+        return result;
     }
 }

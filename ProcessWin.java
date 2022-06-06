@@ -23,4 +23,9 @@ public class ProcessWin {
         int[] wins = {p1Wins, p2Wins};
         return wins;
     }
+
+    public static void resetWins() {
+        p1Wins = 0;
+        p2Wins = 0;
+    }
 }

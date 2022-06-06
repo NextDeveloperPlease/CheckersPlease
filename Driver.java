@@ -41,6 +41,7 @@ public class Driver extends Application {
     private void processButtonPress(ActionEvent event) {
         if (event.getSource() == launchScene.getQuit()) {
             primaryStage.close();
+            // Add another scene to select if CPU or human player
         } else if (event.getSource() == launchScene.getCredits()) {
             primaryStage.setScene(creditsScene);
             primaryStage.centerOnScreen();
@@ -55,11 +56,12 @@ public class Driver extends Application {
 
     private void processGameButtonPress(ActionEvent event) {
         if (event.getSource() == sideFeatures.getstartOverButton()) {
-
+            startScene.resetBoard();
         } else if (event.getSource() == sideFeatures.getQuitButton()) {
             primaryStage.close();
         } else {
             primaryStage.setScene(launchScene);
+            primaryStage.centerOnScreen();
         }
     }
 }
