@@ -8,8 +8,8 @@ public class NumPieces extends Pane {
     Label p1, p2;
 
     public NumPieces() {
-        numRed = Pieces.numRed;
-        numBlack = Pieces.numBlack;
+        numRed = CheckersMisc.numRed;
+        numBlack = CheckersMisc.numBlack;
 
         p1 = new Label("Pieces: " + numRed);
         p2 = new Label("Pieces: " + numBlack);
@@ -25,8 +25,8 @@ public class NumPieces extends Pane {
     }
 
     public void update() {
-        numRed = Pieces.numRed;
-        numBlack = Pieces.numBlack;
+        numRed = CheckersMisc.numRed;
+        numBlack = CheckersMisc.numBlack;
 
         p1.setText("Pieces: " + numRed);
         p2.setText("Pieces: " + numBlack);

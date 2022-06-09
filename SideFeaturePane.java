@@ -21,8 +21,8 @@ public class SideFeaturePane extends Pane {
         public Button startOverButton, quitButton, mainMenuButton;
 
     public SideFeaturePane() {
-        numBlack = Pieces.numBlack;
-        numRed = Pieces.numRed;
+        numBlack = CheckersMisc.numBlack;
+        numRed = CheckersMisc.numRed;
 
         Group scoreGroup, buttonGroup;
 
@@ -80,8 +80,8 @@ public class SideFeaturePane extends Pane {
     }
 
     public void update() {
-        numBlack = Pieces.numBlack;
-        numRed = Pieces.numRed;
+        numBlack = CheckersMisc.numBlack;
+        numRed = CheckersMisc.numRed;
         winning.setProgress((numRed * 1.0) / (numRed + numBlack));
         pieces.update();
     }

@@ -3,88 +3,60 @@ import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 
 public class Pieces extends Pane{
-    public static int numBlack, numRed;
-    public static final int TOTALPIECES = 12;
-    private static Piece[][] spots;
-    
-    public Pieces(EventHandler<ActionEvent>handler) {
-        numBlack = 0;
-        numRed = 0;
-        spots = new Piece[8][8];
-        for (int i = 0; i < spots.length; i++) {
-            for (int j = 0; j < spots[i].length; j++) {
-                Piece spot = new Piece(i, j);
-                spots[i][j] = spot;
-                spot.setLayoutX((87 * i) + 3);
-                spot.setLayoutY((87 * j) + 3);
-                spot.setOnAction(handler);
-                if (j < 3) {
-                    if ((j % 2) == 0) {
-                        if ((i % 2) != 0) {
-                            spot.chooseColor("red");
-                            spot.initVisible(true);
-                            numRed++;
-                        } else {
-                            spot.setVisible(false);
-                            spot.initVisible(false);
-                        }
-                    } else {
-                        if ((i % 2) == 0) {
-                            spot.chooseColor("red");
-                            spot.initVisible(true);
-                            numRed++;
-                        } else {
-                            spot.setVisible(false);
-                            spot.initVisible(false);
-                        }
-                    }
-                } else if (j >= 5) {
-                    if ((j % 2) != 0) {
-                        if ((i % 2) == 0) {
-                            spot.chooseColor("black");
-                            spot.initVisible(true);
-                            numBlack++;
-                        } else {
-                            spot.setVisible(false);
-                            spot.initVisible(false);
-                        }
-                    } else {
-                        if ((i % 2) != 0) {
-                            spot.chooseColor("black");
-                            spot.initVisible(true);
-                            numBlack++;
-                        } else {
-                            spot.setVisible(false);
-                            spot.initVisible(false);
-                        }
-                    }
-                } else {
-                    spot.setVisible(false);
-                }
-                this.getChildren().add(spot);
+    private static Piece[] redPieces, blackPieces;
+    private double displacementVariable;
+
+    public Pieces(EventHandler<ActionEvent>handler, int x, int y) {
+        redPieces = new Piece[12];
+        blackPieces = new Piece[12];
+        this.displacementVariable = CheckersMisc.displacementVariable;
+        
+        for (int i = 0; i < redPieces.length; i++) {
+            Piece piece = new Piece();
+            piece.chooseColor("red");
+            redPieces[i] = piece;
+
+            if (i <= 3) {
+                piece.setLayoutX(((displacementVariable * 2) * i) + 3);
+                piece.setLayoutY(3);
+            } else if (i > 3 & i <= 7) {
+                piece.setLayoutX((displacementVariable * 2) * (i - 4) + (displacementVariable + 3));
+                piece.setLayoutY(displacementVariable + 3);
+            } else {
+                piece.setLayoutX((displacementVariable * 2) * (i - 8) + 3);
+                piece.setLayoutY((displacementVariable * 2) + 3);
             }
+            piece.setInitPosition(piece.getLayoutX(), piece.getLayoutY());
+            this.getChildren().add(piece);
         }
-    }
-
-    public static void setNumPieces(boolean isBlack) {
-        if (isBlack) {
-            numBlack--;
-        } else {
-            numRed--;
-        }
-    }
-
-    public void resetPieces() {
-        for (int i = 0; i < spots.length; i++) {
-            for (int j = 0; j < spots[i].length; j++) {
-                spots[i][j].setVisible(spots[i][j].getVisibility());
+        for (int i = 0; i < redPieces.length; i++) {
+            Piece piece = new Piece();
+            piece.chooseColor("black");
+            blackPieces[i] = piece;
+            
+            if (i <= 3) {
+                piece.setLayoutX(((displacementVariable * 2) * i) + (displacementVariable + 3));
+                piece.setLayoutY((displacementVariable * 5) + 3);
+            } else if (i > 3 & i <= 7) {
+                piece.setLayoutX((displacementVariable * 2) * (i - 4) + 3);
+                piece.setLayoutY((displacementVariable * 6) + 3);
+            } else {
+                piece.setLayoutX((displacementVariable * 2) * (i - 8) + (displacementVariable + 3));
+                piece.setLayoutY((displacementVariable * 7) + 3);
             }
+            piece.setInitPosition(piece.getLayoutX(), piece.getLayoutY());
+            this.getChildren().add(piece);
         }
-        numBlack = TOTALPIECES;
-        numRed = TOTALPIECES;
     }
 
-    public Piece[][] getSpots() {
-        return spots;
+    public static void resetPieces() {
+        for (int i = 0; i < redPieces.length; i++) {
+            redPieces[i].setLayoutX(redPieces[i].getInitPosition()[0]);
+            redPieces[i].setLayoutY(redPieces[i].getInitPosition()[1]);
+
+            blackPieces[i].setLayoutX(blackPieces[i].getInitPosition()[0]);
+            blackPieces[i].setLayoutY(blackPieces[i].getInitPosition()[1]);
+        }
     }
+
 }

@@ -2,10 +2,10 @@ import javafx.scene.control.Button;
 
 public class Piece extends Button {
     private String color;
-    private boolean isVisible;
-    int i, j;
+    private boolean isVisible, isSelected;
+    private double xInit, yInit;
 
-    public Piece(int i, int j) {
+    public Piece() {
         this.setStyle(
             "-fx-background-radius: 5em; " +
             "-fx-min-width: 80px; " +
@@ -13,8 +13,6 @@ public class Piece extends Button {
             "-fx-max-width: 80px; " +
             "-fx-max-height: 80px;"
         );
-        this.i = i;
-        this.j = j;
 
     }
 
@@ -41,8 +39,21 @@ public class Piece extends Button {
         return isVisible;
     }
 
-    public int[] getPosition() {
-        int[] result = {i, j};
+    public void setInitPosition(double xInit, double yInit) {
+        this.xInit = xInit;
+        this.yInit = yInit;
+    }
+
+    public double[] getInitPosition() {
+        double[] result = {xInit, yInit};
         return result;
+    }
+
+    public void isSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean getSelected() {
+        return isSelected;
     }
 }

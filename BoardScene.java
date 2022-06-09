@@ -10,9 +10,10 @@ public class BoardScene extends Scene {
 
     public BoardScene() {
         super(new Group(), 1000, 695, Color.TEAL);
+        CheckersMisc.initializer();
         Board board = new Board();
-        pieces = new Pieces(this::processButtonPress);
-        spots = pieces.getSpots();
+        pieces = new Pieces(this::processButtonPress, 700, 695);
+        // spots = pieces.getSpots();
         side = new SideFeaturePane();
         side.setLayoutX(720);
         side.setLayoutY(25);
@@ -34,31 +35,52 @@ public class BoardScene extends Scene {
 
     // Will have to adjust once king/queen pieces are implemented
     public void processButtonPress(ActionEvent event) {
-        int i = ((Piece) event.getSource()).getPosition()[0];
-        int j = ((Piece) event.getSource()).getPosition()[1];
-        if (spots[i][j].getColor() == "red") {
-            if (i != 0 && i != 11) {
-                spots[i + 1][j + 1].setVisible(true);
-                spots[i - 1][j + 1].setVisible(true);
-            } else if (i == 0) {
-                spots[i + 1][j + 1].setVisible(true);
-            } else {
-                spots[i - 1][j + 1].setVisible(true);
+        String color = ((Piece) event.getSource()).getColor();
+
+        double i = ((Piece) event.getSource()).getInitPosition()[0];
+        double j = ((Piece) event.getSource()).getInitPosition()[1];
+
+        for (int k = 0; k < spots.length; k++) {
+            for (int l = 0; l < spots[k].length; l++) {
+                spots[k][l].setDisable(true);
+                spots[k][l].setOpacity(1.0);
             }
-            spots[i][j].setDisable(true);
-            spots[i][j].setOpacity(.8);
-        } else {
-            if (i != 0 && i != 11) {
-                spots[i + 1][j - 1].setVisible(true);
-                spots[i - 1][j - 1].setVisible(true);
-            } else if (i == 0) {
-                spots[i + 1][j - 1].setVisible(true);
-            } else {
-                spots[i - 1][j - 1].setVisible(true);
-            }
-            spots[i][j].setDisable(true);
-            spots[i][j].setOpacity(.8);
         }
+        // Rewrite to fix removed i and j
+        // if (spots[i][j].getColor() == "red") {
+        //     if (i != 0 && i != 7) {
+        //         spots[i + 1][j + 1].setVisible(true);
+        //         spots[i + 1][j + 1].setDisable(false);
+
+        //         spots[i - 1][j + 1].setVisible(true);
+        //         spots[i - 1][j + 1].setDisable(false);
+        //     } else if (i == 0) {
+        //         spots[i + 1][j + 1].setVisible(true);
+        //         spots[i + 1][j + 1].setDisable(false);
+        //     } else {
+        //         spots[i - 1][j + 1].setVisible(true);
+        //         spots[i - 1][j + 1].setDisable(false);
+        //     }
+        // } else if (spots[i][j].getColor() == "black") {
+        //     if (i != 0 && i != 7) {
+        //         spots[i + 1][j - 1].setVisible(true);
+        //         spots[i + 1][j - 1].setDisable(false);
+
+        //         spots[i - 1][j - 1].setVisible(true);
+        //         spots[i - 1][j - 1].setDisable(false);
+        //     } else if (i == 0) {
+        //         spots[i + 1][j - 1].setVisible(true);
+        //         spots[i + 1][j - 1].setDisable(false);
+        //     } else {
+        //         spots[i - 1][j - 1].setVisible(true);
+        //         spots[i - 1][j - 1].setDisable(false);
+        //     }
+        // } else {
+        //     spots[i][j].chooseColor(color);
+        //     spots[i][j].setVisible(true);
+        // }
+        // spots[i][j].setDisable(false);
+        // spots[i][j].setOpacity(.8);
         
 
         // TODO: check the color of the piece selected

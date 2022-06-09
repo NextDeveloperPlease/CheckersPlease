@@ -4,18 +4,21 @@ public class ProcessWin {
     private static int p1Pieces, p2Pieces;
 
     public ProcessWin() {
-        p1Pieces = Pieces.numRed;
-        p2Pieces = Pieces.numBlack;
+        p1Pieces = CheckersMisc.numRed;
+        p2Pieces = CheckersMisc.numBlack;
     }
 
     public static void update() {
-        p1Pieces = Pieces.numRed;
-        p2Pieces = Pieces.numBlack;
+        p1Pieces = CheckersMisc.numRed;
+        p2Pieces = CheckersMisc.numBlack;
 
-        if (p1Pieces == 0) {
-            p2Wins++;
-        } else if (p2Pieces == 0) {
-            p1Wins++;
+        if (p1Pieces == 0 || p2Pieces == 0) {
+            if (p1Pieces == 0) {
+                p2Wins++;
+            } else if (p2Pieces == 0) {
+                p1Wins++;
+            }
+            Pieces.resetPieces();
         }
     }
 
