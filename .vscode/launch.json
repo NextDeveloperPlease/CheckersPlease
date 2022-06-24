@@ -10,6 +10,14 @@
             "request": "launch",
             "mainClass": "Driver",
             "vmArgs": "--module-path ./lib --add-modules javafx.controls,javafx.fxml",
+            "projectName": "Checkers_4f1e02b3"
+        },
+        {
+            "type": "java",
+            "name": "Launch Driver",
+            "request": "launch",
+            "mainClass": "Driver",
+            "vmArgs": "--module-path ./lib --add-modules javafx.controls,javafx.fxml",
             "projectName": "Checkers_9682b9ed"
         },
         {
