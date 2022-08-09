@@ -1,3 +1,5 @@
+import java.security.spec.InvalidKeySpecException;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
@@ -40,6 +42,49 @@ public class Pieces extends Pane{
             blackPieces[i].setLayoutY(CheckersMisc.position(blackPieces[i].getYPosition()));
         }
     }
+
+    public static void movePiece(ActionEvent event) {
+        Piece selectedPiece = ((Piece)event.getSource());
+        int[] position = selectedPiece.getPosition();
+        int[][] futurePositions = new int[4][2];
+        if (selectedPiece.getColor().equals("red")) {
+            futurePositions[0][0] = position[0] - 1;
+            futurePositions[0][1] = position[1] + 1;
+            futurePositions[1][0] = position[0] + 1;
+            futurePositions[1][1] = position[1] + 1;
+            if (selectedPiece.getKingship()) {
+                futurePositions[2][0] = position[0] - 1;
+                futurePositions[2][1] = position[1] - 1;
+                futurePositions[0][0] = position[0] + 1;
+                futurePositions[0][1] = position[1] - 1;
+            }
+        } else {
+            futurePositions[0][0] = position[0] - 1;
+            futurePositions[0][1] = position[1] - 1;
+            futurePositions[1][0] = position[0] + 1;
+            futurePositions[1][1] = position[1] - 1;
+            if (selectedPiece.getKingship()) {
+                futurePositions[2][0] = position[0] - 1;
+                futurePositions[2][1] = position[1] + 1;
+                futurePositions[0][0] = position[0] + 1;
+                futurePositions[0][1] = position[1] + 1;
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            if (!futurePositions[i].equals(null)) {
+                if (CheckersMisc.checkOpen(futurePositions[i])) {
+                    
+                }
+            }
+        }
+        if (CheckersMisc.checkOpen(futurePositions[0])) {
+
+        }
+        
+        
+    }
+
+    
 
     public static void resetPieces() {
         for (int i = 0; i < redPieces.length; i++) {

@@ -2,7 +2,7 @@ import javafx.scene.control.Button;
 
 public class Piece extends Button {
     private String color;
-    private boolean isVisible, isSelected;
+    private boolean isVisible, isSelected, isKing;
     private int x, y;
 
     public Piece() {
@@ -13,7 +13,7 @@ public class Piece extends Button {
             "-fx-max-width: 80px; " +
             "-fx-max-height: 80px;"
         );
-        
+        isKing = false;
     }
 
     public void chooseColor(String color) {
@@ -27,6 +27,14 @@ public class Piece extends Button {
             "-fx-background-color: " + color);
     }
 
+    public void setKingship() {
+        isKing = true;
+    }
+
+    public boolean getKingship() {
+        return isKing;
+    }
+
     public void setPosition(int[] position) {
         this.x = position[0];
         this.y = position[1];
@@ -38,6 +46,11 @@ public class Piece extends Button {
 
     public int getYPosition() {
         return y;
+    }
+
+    public int[] getPosition() {
+        int[] result = {x, y};
+        return result;
     }
 
     public String getColor() {
