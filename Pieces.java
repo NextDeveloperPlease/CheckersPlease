@@ -4,6 +4,7 @@ import javafx.scene.layout.Pane;
 public class Pieces extends Pane{
     private static Piece[] redPieces, blackPieces, futureSpots;
     private Piece selectedPiece;
+    
 
 
     public Pieces() {
@@ -45,7 +46,7 @@ public class Pieces extends Pane{
         selectedPiece = ((Piece)event.getSource());
         int[] position = selectedPiece.getPosition();
         int[][] futurePositions = new int[4][2];
-        if (selectedPiece.getColor().equals("red")) {
+        if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
             futurePositions[0][0] = position[0] - 1;
             futurePositions[0][1] = position[1] + 1;
             futurePositions[1][0] = position[0] + 1;
@@ -58,7 +59,7 @@ public class Pieces extends Pane{
                 futurePositions[3][0] = position[0] + 1;
                 futurePositions[3][1] = position[1] - 1;
             }
-        } else {
+        } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
             futurePositions[0][0] = position[0] - 1;
             futurePositions[0][1] = position[1] - 1;
             futurePositions[1][0] = position[0] + 1;
@@ -98,7 +99,7 @@ public class Pieces extends Pane{
         }
         selectedPiece.setPosition(((Piece)event.getSource()).getPosition());
         CheckersMisc.saveSpaces(redPieces, blackPieces);
-
+        CheckersMisc.switchPlayers();
     }
 
     public static void resetPieces() {

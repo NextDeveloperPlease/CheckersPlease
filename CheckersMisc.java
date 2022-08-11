@@ -6,11 +6,13 @@ public class CheckersMisc {
     private static int historyIndex;
     public static final double displacementVariable = 87.0;
     public static int[][][][] locationHistory;
+    public static boolean redTurn;
 
     public static void initializer() {
         numRed = 12;
         numBlack = 12;
         historyIndex = 0;
+        redTurn = true;
     }
 
     public static void setNumPieces(boolean isBlack) {
@@ -30,8 +32,12 @@ public class CheckersMisc {
         return ((87 * position) + 3);
     }
 
-    public static void movePiece(Piece piece) {
-        
+    public static void switchPlayers() {
+        if (redTurn) {
+            redTurn = false;
+        } else {
+            redTurn = true;
+        }
      //todo Finish this   
     }
 
@@ -43,9 +49,7 @@ public class CheckersMisc {
                     locationHistory[historyIndex][i][j] = redPieces[j].getPosition();
                 } else {
                     locationHistory[historyIndex][i][j] = blackPieces[j].getPosition();
-                }
-                System.out.println(locationHistory[historyIndex][i][j][0] + " " + locationHistory[historyIndex][i][j][1]);
-                    
+                }   
             }
         }
     }
@@ -56,7 +60,6 @@ public class CheckersMisc {
             for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
                 if (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1]) {
                     isOpen = false;
-                    System.out.println("made it");
                 } //Add in future positions not on the board
             }
         }
