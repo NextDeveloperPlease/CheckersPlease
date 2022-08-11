@@ -1,3 +1,5 @@
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 public class Piece extends Button {
@@ -5,7 +7,7 @@ public class Piece extends Button {
     private boolean isVisible, isSelected, isKing;
     private int x, y;
 
-    public Piece() {
+    public Piece(EventHandler<ActionEvent>handler) {
         this.setStyle(
             "-fx-background-radius: 5em; " +
             "-fx-min-width: 80px; " +
@@ -14,6 +16,7 @@ public class Piece extends Button {
             "-fx-max-height: 80px;"
         );
         isKing = false;
+        this.setOnAction(handler);
     }
 
     public void chooseColor(String color) {
@@ -38,6 +41,8 @@ public class Piece extends Button {
     public void setPosition(int[] position) {
         this.x = position[0];
         this.y = position[1];
+        setLayoutX(CheckersMisc.position(x));
+        setLayoutY(CheckersMisc.position(y));
     }
 
     public int getXPosition() {

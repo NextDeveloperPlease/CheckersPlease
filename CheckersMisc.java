@@ -1,5 +1,6 @@
 public class CheckersMisc {
     public static final int TOTALPIECES = 12;
+    public static final int[] DEATHSPACE = {9,9};
     public static int numRed;
     public static int numBlack;
     private static int historyIndex;
@@ -30,12 +31,12 @@ public class CheckersMisc {
     }
 
     public static void movePiece(Piece piece) {
-        int x = piece.getXPosition();
-        int y = piece.getYPosition();
+        
      //todo Finish this   
     }
 
     public static void saveSpaces(Piece[] redPieces, Piece[] blackPieces) {
+        historyIndex++;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 12; j++) {
                 if (i == 0) {
@@ -43,19 +44,20 @@ public class CheckersMisc {
                 } else {
                     locationHistory[historyIndex][i][j] = blackPieces[j].getPosition();
                 }
+                System.out.println(locationHistory[historyIndex][i][j][0] + " " + locationHistory[historyIndex][i][j][1]);
                     
             }
         }
-        historyIndex++;
     }
 
     public static boolean checkOpen(int[] futurePositions) {
-        boolean isOpen = false;
-        for (int i = 0; i < locationHistory[historyIndex][i].length; i++) {
-            for (int j = 0; j < locationHistory[historyIndex][i][j].length; j++) {
-                if (!futurePositions.equals(locationHistory[historyIndex][i][j])) {
-                    isOpen = true;
-                }
+        boolean isOpen = true;
+        for (int i = 0; i < locationHistory[historyIndex].length; i++) {
+            for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
+                if (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1]) {
+                    isOpen = false;
+                    System.out.println("made it");
+                } //Add in future positions not on the board
             }
         }
         return isOpen;
@@ -76,7 +78,12 @@ public class CheckersMisc {
                             }
                         };
         locationHistory[historyIndex] = start;
-        historyIndex++;
         return start;
+    }
+
+    public static void pieceKilled(Piece piece) {
+        piece.setPosition(DEATHSPACE);
+        piece.setDisable(true);
+        piece.setVisible(false);
     }
 }

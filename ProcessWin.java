@@ -18,7 +18,7 @@ public class ProcessWin {
             } else if (p2Pieces == 0) {
                 p1Wins++;
             }
-            Pieces.resetPieces();
+            Pieces.resetPieces();;
         }
     }
 
