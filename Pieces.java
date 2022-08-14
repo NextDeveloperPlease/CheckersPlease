@@ -4,12 +4,14 @@ import javafx.scene.layout.Pane;
 public class Pieces extends Pane{
     private static Piece[] redPieces, blackPieces, futureSpots;
     private Piece selectedPiece;
+    private boolean firstSelected;
     
 
 
     public Pieces() {
         redPieces = new Piece[12];
         blackPieces = new Piece[12];
+        firstSelected = true;
 
         for (int i = 0; i < redPieces.length; i++) {
             redPieces[i] = new Piece(this::firstPieceSelected);
@@ -44,6 +46,10 @@ public class Pieces extends Pane{
 
     public void firstPieceSelected(ActionEvent event) {
         selectedPiece = ((Piece)event.getSource());
+        if (!firstSelected) {
+            checkDoublePieceSelected();
+        }
+        firstSelected = false;
         int[] position = selectedPiece.getPosition();
         int[][] futurePositions = new int[4][2];
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
@@ -60,17 +66,17 @@ public class Pieces extends Pane{
                 futurePositions[3][1] = position[1] - 1;
             }
         } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
-            futurePositions[0][0] = position[0] - 1;
-            futurePositions[0][1] = position[1] - 1;
-            futurePositions[1][0] = position[0] + 1;
-            futurePositions[1][1] = position[1] - 1;
-            futurePositions[2] = CheckersMisc.DEATHSPACE;
-            futurePositions[3] = CheckersMisc.DEATHSPACE;
+            futurePositions[2][0] = position[0] - 1;
+            futurePositions[2][1] = position[1] - 1;
+            futurePositions[3][0] = position[0] + 1;
+            futurePositions[3][1] = position[1] - 1;
+            futurePositions[0] = CheckersMisc.DEATHSPACE;
+            futurePositions[1] = CheckersMisc.DEATHSPACE;
             if (selectedPiece.getKingship()) {
-                futurePositions[2][0] = position[0] - 1;
-                futurePositions[2][1] = position[1] + 1;
-                futurePositions[3][0] = position[0] + 1;
-                futurePositions[3][1] = position[1] + 1;
+                futurePositions[0][0] = position[0] - 1;
+                futurePositions[0][1] = position[1] + 1;
+                futurePositions[1][0] = position[0] + 1;
+                futurePositions[1][1] = position[1] + 1;
             }
         }
         
@@ -80,7 +86,6 @@ public class Pieces extends Pane{
         for (int i = 0; i < 4; i++) {
             if (!futurePositions[i].equals(CheckersMisc.DEATHSPACE)) {
                 if (CheckersMisc.checkOpen(futurePositions[i])) {
-                    //selectedPiece.setPosition(futurePositions[i]);
                     futureSpots[j] = new Piece(this::movePiece);
                     futureSpots[j].setPosition(futurePositions[i]);
                     this.getChildren().add(futureSpots[j]);
@@ -88,6 +93,12 @@ public class Pieces extends Pane{
                 }
             }
         }       
+    }
+
+    public void checkDoublePieceSelected() {
+        for (int i = 0; i < 4; i++) {
+            this.getChildren().remove(futureSpots[i]);
+        }
     }
 
     public void movePiece(ActionEvent event) {
@@ -100,6 +111,7 @@ public class Pieces extends Pane{
         selectedPiece.setPosition(((Piece)event.getSource()).getPosition());
         CheckersMisc.saveSpaces(redPieces, blackPieces);
         CheckersMisc.switchPlayers();
+        firstSelected = true;
     }
 
     public static void resetPieces() {

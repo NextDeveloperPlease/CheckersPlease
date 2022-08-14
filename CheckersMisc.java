@@ -58,7 +58,7 @@ public class CheckersMisc {
         boolean isOpen = true;
         for (int i = 0; i < locationHistory[historyIndex].length; i++) {
             for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-                if (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1]) {
+                if (futurePositions[0] == 8 || futurePositions[1] == 8 || (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1])) {
                     isOpen = false;
                 } //Add in future positions not on the board
             }

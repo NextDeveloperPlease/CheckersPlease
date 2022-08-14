@@ -46,6 +46,7 @@ public class BoardScene extends Scene {
         Pieces.resetPieces();
         ProcessWin.resetWins();
         side.update();
+        CheckersMisc.redTurn = true;
     }
 
 
