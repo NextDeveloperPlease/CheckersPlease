@@ -49,7 +49,7 @@ public class CheckersMisc {
                     locationHistory[historyIndex][i][j] = redPieces[j].getPosition();
                 } else {
                     locationHistory[historyIndex][i][j] = blackPieces[j].getPosition();
-                }   
+                }
             }
         }
     }
