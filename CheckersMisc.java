@@ -56,11 +56,14 @@ public class CheckersMisc {
 
     public static boolean checkOpen(int[] futurePositions) {
         boolean isOpen = true;
+        System.out.println("Made into checkOpen");
         for (int i = 0; i < locationHistory[historyIndex].length; i++) {
             for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
                 if (futurePositions[0] == 8 || futurePositions[1] == 8 || (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1])) {
                     isOpen = false;
+                    System.out.println("Made into actual check");
                 } //Add in future positions not on the board
+                System.out.println(futurePositions[0] + " " + futurePositions[1]);
             }
         }
         return isOpen;

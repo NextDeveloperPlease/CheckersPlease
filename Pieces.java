@@ -1,10 +1,13 @@
+import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
 
 public class Pieces extends Pane{
-    private static Piece[] redPieces, blackPieces, futureSpots;
+    private static Piece[] redPieces, blackPieces;
     private Piece selectedPiece;
     private boolean firstSelected;
+    private ArrayList<Piece> futureSpots;
     
 
 
@@ -45,67 +48,80 @@ public class Pieces extends Pane{
     }
 
     public void firstPieceSelected(ActionEvent event) {
+        System.out.println("Made into firstPieceSelected");
         selectedPiece = ((Piece)event.getSource());
-        if (!firstSelected) {
-            checkDoublePieceSelected();
-        }
+        futureSpots = new ArrayList<Piece>();
+        // if (!firstSelected) {
+        //     checkDoublePieceSelected();
+        // }
         firstSelected = false;
         int[] position = selectedPiece.getPosition();
-        int[][] futurePositions = new int[4][2];
+        int[] checkPosition = new int[2];
+        ArrayList<int[]> futurePositions = new ArrayList<int[]>();
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
-            futurePositions[0][0] = position[0] - 1;
-            futurePositions[0][1] = position[1] + 1;
-            futurePositions[1][0] = position[0] + 1;
-            futurePositions[1][1] = position[1] + 1;
-            futurePositions[2] = CheckersMisc.DEATHSPACE;
-            futurePositions[3] = CheckersMisc.DEATHSPACE;
+            checkPosition[0] = position[0] - 1;
+            checkPosition[1] = position[1] + 1;
+            futurePositions.add(checkPosition);
+
+            checkPosition[0] = position[0] + 1;
+            checkPosition[1] = position[1] + 1;
+            futurePositions.add(checkPosition);
+            System.out.println("made it through setting checkPosition");
+
             if (selectedPiece.getKingship()) {
-                futurePositions[2][0] = position[0] - 1;
-                futurePositions[2][1] = position[1] - 1;
-                futurePositions[3][0] = position[0] + 1;
-                futurePositions[3][1] = position[1] - 1;
+                
+                checkPosition[0] = position[0] - 1;
+                checkPosition[1] = position[1] - 1;
+                futurePositions.add(checkPosition);
+                
+                checkPosition[0] = position[0] + 1;
+                checkPosition[1] = position[1] - 1;
+                futurePositions.add(checkPosition);
             }
         } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
-            futurePositions[2][0] = position[0] - 1;
-            futurePositions[2][1] = position[1] - 1;
-            futurePositions[3][0] = position[0] + 1;
-            futurePositions[3][1] = position[1] - 1;
-            futurePositions[0] = CheckersMisc.DEATHSPACE;
-            futurePositions[1] = CheckersMisc.DEATHSPACE;
+            
             if (selectedPiece.getKingship()) {
-                futurePositions[0][0] = position[0] - 1;
-                futurePositions[0][1] = position[1] + 1;
-                futurePositions[1][0] = position[0] + 1;
-                futurePositions[1][1] = position[1] + 1;
+                // issue with checkPosition being added to the ArrayList using a reference instead of a deep copy
+                checkPosition[0] = position[0] - 1;
+                checkPosition[1] = position[1] + 1;
+                futurePositions.add(checkPosition);
+
+                checkPosition[0] = position[0] + 1;
+                checkPosition[1] = position[1] + 1;
+                futurePositions.add(checkPosition);
             }
+            
+            checkPosition[0] = position[0] - 1;
+            checkPosition[1] = position[1] - 1;
+            futurePositions.add(checkPosition);
+
+            checkPosition[0] = position[0] + 1;
+            checkPosition[1] = position[1] - 1;
+            futurePositions.add(checkPosition);
         }
         
-
-        futureSpots = new Piece[4];
-        int j = 0;
-        for (int i = 0; i < 4; i++) {
-            if (!futurePositions[i].equals(CheckersMisc.DEATHSPACE)) {
-                if (CheckersMisc.checkOpen(futurePositions[i])) {
-                    futureSpots[j] = new Piece(this::movePiece);
-                    futureSpots[j].setPosition(futurePositions[i]);
-                    this.getChildren().add(futureSpots[j]);
-                    j++;
-                }
+        for (int[] spot : futurePositions) {
+            if (CheckersMisc.checkOpen(spot)) {
+                System.out.println("Made into for each loop");
+                Piece adjPiece = new Piece(this:: movePiece);
+                adjPiece.setPosition(spot);
+                futureSpots.add(adjPiece);
+                this.getChildren().add(adjPiece);
             }
         }       
     }
 
-    public void checkDoublePieceSelected() {
-        for (int i = 0; i < 4; i++) {
-            this.getChildren().remove(futureSpots[i]);
-        }
-    }
+    // public void checkDoublePieceSelected() {
+    //     for (int i = 0; i < 4; i++) {
+    //         this.getChildren().remove(futureSpots[i]);
+    //     }
+    // }
 
     public void movePiece(ActionEvent event) {
-        for (int i = 0; i < 4; i++) {
-            if (futureSpots[i] != null) {
-                futureSpots[i].setDisable(true);
-                futureSpots[i].setVisible(false);
+        for (Piece spot : futureSpots) {
+            if (spot != null) {
+                spot.setDisable(true);
+                spot.setVisible(false);
             }
         }
         selectedPiece.setPosition(((Piece)event.getSource()).getPosition());
