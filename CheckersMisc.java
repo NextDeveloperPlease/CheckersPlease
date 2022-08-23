@@ -71,22 +71,46 @@ public class CheckersMisc {
     //     return isOpen;
     // }
 
-    public static void checkJump(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
-
+    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
+        boolean open = true;
         for (int index = 0; index < futurePositions.size(); index++) {
             for (int i = 0; i < locationHistory[historyIndex].length; i++) {
                 for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-                    if ((futurePositions.get(index))[0] != 8 || (futurePositions.get(index))[1] != 8 || ((futurePositions.get(index))[0] != locationHistory[historyIndex][i][j][0] && (futurePositions.get(index))[1] != locationHistory[historyIndex][i][j][1])) {
-                        Piece adjPiece = new Piece(handler);
-                        adjPiece.setPosition(futurePositions.get(index));
-                        futureSpots.add(adjPiece);
-                        i = locationHistory[historyIndex].length - 1;
-                        j = locationHistory[historyIndex][i].length - 1;
-                    } else if (i == (locationHistory[historyIndex].length - 1)) {
-                        
-                    }
+                    if ((futurePositions.get(index))[0] == 8 || (futurePositions.get(index))[1] == 8 || ((futurePositions.get(index))[0] == locationHistory[historyIndex][i][j][0] && (futurePositions.get(index))[1] == locationHistory[historyIndex][i][j][1])) {
+                        open = false;
+                    } 
                 }
             } 
+            if (open) {
+                Piece adjPiece = new Piece(handler);
+                        adjPiece.setPosition(futurePositions.get(index));
+                        futureSpots.add(adjPiece);
+            } else {
+                // int[] jumpPosition = new int[2];
+                // switch (index) {
+                //     case 0:
+                //         jumpPosition[0] = (futurePositions.get(index)[0] - 1);
+                //         jumpPosition[1] = (futurePositions.get(index)[1] + 1);
+                //         futurePositions.add(jumpPosition.clone());
+                //         break;
+                //     case 1:
+                //         jumpPosition[0] = (futurePositions.get(index)[0] + 1);
+                //         jumpPosition[1] = (futurePositions.get(index)[1] + 1);
+                //         futurePositions.add(jumpPosition.clone());
+                //         break;
+                //     case 2:
+                //         jumpPosition[0] = (futurePositions.get(index)[0] - 1);
+                //         jumpPosition[1] = (futurePositions.get(index)[1] - 1);
+                //         futurePositions.add(jumpPosition.clone());
+                //         break;
+                //     case 3:
+                //         jumpPosition[0] = (futurePositions.get(index)[0] + 1);
+                //         jumpPosition[1] = (futurePositions.get(index)[1] - 1);
+                //         futurePositions.add(jumpPosition.clone());
+                //         break;
+                // }
+            }
+            open = true;
         }
         
         

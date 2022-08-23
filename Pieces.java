@@ -56,25 +56,25 @@ public class Pieces extends Pane{
         firstSelected = false;
         int[] position = selectedPiece.getPosition();
         int[] checkPosition = new int[2];
-        ArrayList<int[]> futurePositions = new ArrayList<>();
+        ArrayList<int[]> futurePositions = new ArrayList<>(4);
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
             checkPosition[0] = position[0] - 1;
             checkPosition[1] = position[1] + 1;
-            futurePositions.add(checkPosition.clone());
+            futurePositions.add(0, checkPosition.clone());
 
             checkPosition[0] = position[0] + 1;
             checkPosition[1] = position[1] + 1;
-            futurePositions.add(checkPosition.clone());
+            futurePositions.add(1, checkPosition.clone());
 
             if (selectedPiece.getKingship()) {
                 
                 checkPosition[0] = position[0] - 1;
                 checkPosition[1] = position[1] - 1;
-                futurePositions.add(checkPosition.clone());
+                futurePositions.add(2, checkPosition.clone());
                 
                 checkPosition[0] = position[0] + 1;
                 checkPosition[1] = position[1] - 1;
-                futurePositions.add(checkPosition.clone());
+                futurePositions.add(3, checkPosition.clone());
             }
         } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
             
@@ -82,20 +82,21 @@ public class Pieces extends Pane{
                 // issue with checkPosition being added to the ArrayList using a reference instead of a deep copy
                 checkPosition[0] = position[0] - 1;
                 checkPosition[1] = position[1] + 1;
-                futurePositions.add(checkPosition.clone());
+                futurePositions.add(0, checkPosition.clone());
 
                 checkPosition[0] = position[0] + 1;
                 checkPosition[1] = position[1] + 1;
-                futurePositions.add(checkPosition.clone());
+                futurePositions.add(1, checkPosition.clone());
             }
-            
+            futurePositions.add(CheckersMisc.DEATHSPACE);
+            futurePositions.add(CheckersMisc.DEATHSPACE);
             checkPosition[0] = position[0] - 1;
             checkPosition[1] = position[1] - 1;
-            futurePositions.add(checkPosition.clone());
+            futurePositions.add(2, checkPosition.clone());
 
             checkPosition[0] = position[0] + 1;
             checkPosition[1] = position[1] - 1;
-            futurePositions.add(checkPosition.clone());
+            futurePositions.add(3, checkPosition.clone());
         }
         
         // for (int[] spot : futurePositions) {
@@ -107,7 +108,7 @@ public class Pieces extends Pane{
         //     }
         // }
         
-        CheckersMisc.checkJump(futurePositions, futureSpots, this::movePiece);
+        CheckersMisc.openSpaces(futurePositions, futureSpots, this::movePiece);
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
         }
