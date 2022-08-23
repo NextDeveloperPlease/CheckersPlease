@@ -59,18 +59,6 @@ public class CheckersMisc {
         }
     }
 
-    // public static boolean checkOpen(int[] futurePositions) {
-    //     boolean isOpen = true;
-    //     for (int i = 0; i < locationHistory[historyIndex].length; i++) {
-    //         for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-    //             if (futurePositions[0] == 8 || futurePositions[1] == 8 || (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1])) {
-    //                 isOpen = false;
-    //             } //Add in future positions not on the board
-    //         }
-    //     }
-    //     return isOpen;
-    // }
-
     public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
         boolean open = true;
         for (int index = 0; index < futurePositions.size(); index++) {
@@ -114,6 +102,52 @@ public class CheckersMisc {
         }
         
         
+    }
+
+    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions) {
+        int[] position = selectedPiece.getPosition();
+        int[] checkPosition = new int[2];
+        if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
+            checkPosition[0] = position[0] - 1;
+            checkPosition[1] = position[1] + 1;
+            futurePositions.add(0, checkPosition.clone());
+
+            checkPosition[0] = position[0] + 1;
+            checkPosition[1] = position[1] + 1;
+            futurePositions.add(1, checkPosition.clone());
+
+            if (selectedPiece.getKingship()) {
+                
+                checkPosition[0] = position[0] - 1;
+                checkPosition[1] = position[1] - 1;
+                futurePositions.add(2, checkPosition.clone());
+                
+                checkPosition[0] = position[0] + 1;
+                checkPosition[1] = position[1] - 1;
+                futurePositions.add(3, checkPosition.clone());
+            }
+        } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
+            
+            if (selectedPiece.getKingship()) {
+                // issue with checkPosition being added to the ArrayList using a reference instead of a deep copy
+                checkPosition[0] = position[0] - 1;
+                checkPosition[1] = position[1] + 1;
+                futurePositions.add(0, checkPosition.clone());
+
+                checkPosition[0] = position[0] + 1;
+                checkPosition[1] = position[1] + 1;
+                futurePositions.add(1, checkPosition.clone());
+            }
+            futurePositions.add(CheckersMisc.DEATHSPACE);
+            futurePositions.add(CheckersMisc.DEATHSPACE);
+            checkPosition[0] = position[0] - 1;
+            checkPosition[1] = position[1] - 1;
+            futurePositions.add(2, checkPosition.clone());
+
+            checkPosition[0] = position[0] + 1;
+            checkPosition[1] = position[1] - 1;
+            futurePositions.add(3, checkPosition.clone());
+        }
     }
 
     public static int[][][] startPositions() {
