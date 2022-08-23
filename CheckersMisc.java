@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 public class CheckersMisc {
     public static final int TOTALPIECES = 12;
     public static final int[] DEATHSPACE = {9,9};
@@ -54,19 +59,37 @@ public class CheckersMisc {
         }
     }
 
-    public static boolean checkOpen(int[] futurePositions) {
-        boolean isOpen = true;
-        System.out.println("Made into checkOpen");
-        for (int i = 0; i < locationHistory[historyIndex].length; i++) {
-            for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-                if (futurePositions[0] == 8 || futurePositions[1] == 8 || (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1])) {
-                    isOpen = false;
-                    System.out.println("Made into actual check");
-                } //Add in future positions not on the board
-                System.out.println(futurePositions[0] + " " + futurePositions[1]);
-            }
+    // public static boolean checkOpen(int[] futurePositions) {
+    //     boolean isOpen = true;
+    //     for (int i = 0; i < locationHistory[historyIndex].length; i++) {
+    //         for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
+    //             if (futurePositions[0] == 8 || futurePositions[1] == 8 || (futurePositions[0] == locationHistory[historyIndex][i][j][0] && futurePositions[1] == locationHistory[historyIndex][i][j][1])) {
+    //                 isOpen = false;
+    //             } //Add in future positions not on the board
+    //         }
+    //     }
+    //     return isOpen;
+    // }
+
+    public static void checkJump(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
+
+        for (int index = 0; index < futurePositions.size(); index++) {
+            for (int i = 0; i < locationHistory[historyIndex].length; i++) {
+                for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
+                    if ((futurePositions.get(index))[0] != 8 || (futurePositions.get(index))[1] != 8 || ((futurePositions.get(index))[0] != locationHistory[historyIndex][i][j][0] && (futurePositions.get(index))[1] != locationHistory[historyIndex][i][j][1])) {
+                        Piece adjPiece = new Piece(handler);
+                        adjPiece.setPosition(futurePositions.get(index));
+                        futureSpots.add(adjPiece);
+                        i = locationHistory[historyIndex].length - 1;
+                        j = locationHistory[historyIndex][i].length - 1;
+                    } else if (i == (locationHistory[historyIndex].length - 1)) {
+                        
+                    }
+                }
+            } 
         }
-        return isOpen;
+        
+        
     }
 
     public static int[][][] startPositions() {

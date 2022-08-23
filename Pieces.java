@@ -7,7 +7,7 @@ public class Pieces extends Pane{
     private static Piece[] redPieces, blackPieces;
     private Piece selectedPiece;
     private boolean firstSelected;
-    private ArrayList<Piece> futureSpots;
+    public ArrayList<Piece> futureSpots;
     
 
 
@@ -48,35 +48,33 @@ public class Pieces extends Pane{
     }
 
     public void firstPieceSelected(ActionEvent event) {
-        System.out.println("Made into firstPieceSelected");
         selectedPiece = ((Piece)event.getSource());
+        if (!firstSelected) {
+            checkDoublePieceSelected();
+        }
         futureSpots = new ArrayList<Piece>();
-        // if (!firstSelected) {
-        //     checkDoublePieceSelected();
-        // }
         firstSelected = false;
         int[] position = selectedPiece.getPosition();
         int[] checkPosition = new int[2];
-        ArrayList<int[]> futurePositions = new ArrayList<int[]>();
+        ArrayList<int[]> futurePositions = new ArrayList<>();
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
             checkPosition[0] = position[0] - 1;
             checkPosition[1] = position[1] + 1;
-            futurePositions.add(checkPosition);
+            futurePositions.add(checkPosition.clone());
 
             checkPosition[0] = position[0] + 1;
             checkPosition[1] = position[1] + 1;
-            futurePositions.add(checkPosition);
-            System.out.println("made it through setting checkPosition");
+            futurePositions.add(checkPosition.clone());
 
             if (selectedPiece.getKingship()) {
                 
                 checkPosition[0] = position[0] - 1;
                 checkPosition[1] = position[1] - 1;
-                futurePositions.add(checkPosition);
+                futurePositions.add(checkPosition.clone());
                 
                 checkPosition[0] = position[0] + 1;
                 checkPosition[1] = position[1] - 1;
-                futurePositions.add(checkPosition);
+                futurePositions.add(checkPosition.clone());
             }
         } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
             
@@ -84,38 +82,43 @@ public class Pieces extends Pane{
                 // issue with checkPosition being added to the ArrayList using a reference instead of a deep copy
                 checkPosition[0] = position[0] - 1;
                 checkPosition[1] = position[1] + 1;
-                futurePositions.add(checkPosition);
+                futurePositions.add(checkPosition.clone());
 
                 checkPosition[0] = position[0] + 1;
                 checkPosition[1] = position[1] + 1;
-                futurePositions.add(checkPosition);
+                futurePositions.add(checkPosition.clone());
             }
             
             checkPosition[0] = position[0] - 1;
             checkPosition[1] = position[1] - 1;
-            futurePositions.add(checkPosition);
+            futurePositions.add(checkPosition.clone());
 
             checkPosition[0] = position[0] + 1;
             checkPosition[1] = position[1] - 1;
-            futurePositions.add(checkPosition);
+            futurePositions.add(checkPosition.clone());
         }
         
-        for (int[] spot : futurePositions) {
-            if (CheckersMisc.checkOpen(spot)) {
-                System.out.println("Made into for each loop");
-                Piece adjPiece = new Piece(this:: movePiece);
-                adjPiece.setPosition(spot);
-                futureSpots.add(adjPiece);
-                this.getChildren().add(adjPiece);
-            }
-        }       
+        // for (int[] spot : futurePositions) {
+        //     if (CheckersMisc.checkOpen(spot)) {
+        //         Piece adjPiece = new Piece(this:: movePiece);
+        //         adjPiece.setPosition(spot);
+        //         futureSpots.add(adjPiece);
+        //         this.getChildren().add(adjPiece);
+        //     }
+        // }
+        
+        CheckersMisc.checkJump(futurePositions, futureSpots, this::movePiece);
+        for (Piece piece : futureSpots) {
+            this.getChildren().add(piece);
+        }
+        
     }
 
-    // public void checkDoublePieceSelected() {
-    //     for (int i = 0; i < 4; i++) {
-    //         this.getChildren().remove(futureSpots[i]);
-    //     }
-    // }
+    public void checkDoublePieceSelected() {
+        for (int i = 0; i < futureSpots.size(); i++) {
+            this.getChildren().remove(futureSpots.get(i));
+        }
+    }
 
     public void movePiece(ActionEvent event) {
         for (Piece spot : futureSpots) {
