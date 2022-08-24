@@ -59,7 +59,7 @@ public class CheckersMisc {
         }
     }
 
-    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
+    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, String color) {
         boolean open = true;
         for (int index = 0; index < futurePositions.size(); index++) {
             for (int i = 0; i < locationHistory[historyIndex].length; i++) {
@@ -71,40 +71,60 @@ public class CheckersMisc {
             } 
             if (open) {
                 Piece adjPiece = new Piece(handler);
-                        adjPiece.setPosition(futurePositions.get(index));
-                        futureSpots.add(adjPiece);
+                adjPiece.setColor(color);
+                adjPiece.setPosition(futurePositions.get(index));
+                futureSpots.add(adjPiece);
             } else {
-                // int[] jumpPosition = new int[2];
-                // switch (index) {
-                //     case 0:
-                //         jumpPosition[0] = (futurePositions.get(index)[0] - 1);
-                //         jumpPosition[1] = (futurePositions.get(index)[1] + 1);
-                //         futurePositions.add(jumpPosition.clone());
-                //         break;
-                //     case 1:
-                //         jumpPosition[0] = (futurePositions.get(index)[0] + 1);
-                //         jumpPosition[1] = (futurePositions.get(index)[1] + 1);
-                //         futurePositions.add(jumpPosition.clone());
-                //         break;
-                //     case 2:
-                //         jumpPosition[0] = (futurePositions.get(index)[0] - 1);
-                //         jumpPosition[1] = (futurePositions.get(index)[1] - 1);
-                //         futurePositions.add(jumpPosition.clone());
-                //         break;
-                //     case 3:
-                //         jumpPosition[0] = (futurePositions.get(index)[0] + 1);
-                //         jumpPosition[1] = (futurePositions.get(index)[1] - 1);
-                //         futurePositions.add(jumpPosition.clone());
-                //         break;
-                // }
+                checkJump(index, futurePositions, handler, futureSpots, color);
             }
             open = true;
         }
         
         
+        
     }
 
-    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions) {
+    public static void checkJump(int index, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color) {
+        int[] jumpPosition = new int[2];
+        boolean open = true;
+                switch (index) {
+                    case 0:
+                        jumpPosition[0] = (futurePositions.get(index)[0] - 1);
+                        jumpPosition[1] = (futurePositions.get(index)[1] + 1);
+                        break;
+                    case 1:
+                        jumpPosition[0] = (futurePositions.get(index)[0] + 1);
+                        jumpPosition[1] = (futurePositions.get(index)[1] + 1);
+                        break;
+                    case 2:
+                        jumpPosition[0] = (futurePositions.get(index)[0] - 1);
+                        jumpPosition[1] = (futurePositions.get(index)[1] - 1);
+                        break;
+                    case 3:
+                        jumpPosition[0] = (futurePositions.get(index)[0] + 1);
+                        jumpPosition[1] = (futurePositions.get(index)[1] - 1);
+                        break;
+                }
+                for (int i = 0; i < locationHistory[historyIndex].length; i++) {
+                    for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
+                        if (jumpPosition[0] == 8 || jumpPosition[1] == 8 || (jumpPosition[0] == locationHistory[historyIndex][i][j][0] && jumpPosition[1] == locationHistory[historyIndex][i][j][1])) {
+                            open = false;
+                        } 
+                    }
+                }
+                // This works to show one potential spot. It doesn't repeat for the second option.
+                // Also, it shows the potential spot and the next spot that could be selected, rather than check if its a jump or not.
+                // If the spot is open, it displays it.
+                if (open) {
+                    Piece selectedPiece = new Piece(handler);
+                    selectedPiece.setColor(color);
+                    selectedPiece.setPosition(jumpPosition);
+                    futureSpots.add(selectedPiece);
+                    potentialPositions(selectedPiece, futurePositions, futureSpots, handler);
+                }
+    }
+
+    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
         int[] position = selectedPiece.getPosition();
         int[] checkPosition = new int[2];
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
@@ -148,6 +168,8 @@ public class CheckersMisc {
             checkPosition[1] = position[1] - 1;
             futurePositions.add(3, checkPosition.clone());
         }
+
+        openSpaces(futurePositions, futureSpots, handler, selectedPiece.getColor());
     }
 
     public static int[][][] startPositions() {

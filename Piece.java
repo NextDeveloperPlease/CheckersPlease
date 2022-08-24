@@ -30,6 +30,10 @@ public class Piece extends Button {
             "-fx-background-color: " + color);
     }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     public void setKingship() {
         isKing = true;
     }

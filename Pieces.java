@@ -8,6 +8,7 @@ public class Pieces extends Pane{
     private Piece selectedPiece;
     private boolean firstSelected;
     public ArrayList<Piece> futureSpots;
+    public ArrayList<int[]> futurePositions;
     
 
 
@@ -50,15 +51,15 @@ public class Pieces extends Pane{
     public void firstPieceSelected(ActionEvent event) {
         selectedPiece = ((Piece)event.getSource());
         if (!firstSelected) {
+            System.out.println("Enters");
             checkDoublePieceSelected();
         }
-        ArrayList<int[]> futurePositions = new ArrayList<>(4);
         futureSpots = new ArrayList<Piece>();
+        futurePositions = new ArrayList<>(4);
         firstSelected = false;
         
-        CheckersMisc.potentialPositions(selectedPiece, futurePositions);
+        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece);
 
-        CheckersMisc.openSpaces(futurePositions, futureSpots, this::movePiece);
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
         }
