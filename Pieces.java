@@ -51,14 +51,15 @@ public class Pieces extends Pane{
     public void firstPieceSelected(ActionEvent event) {
         selectedPiece = ((Piece)event.getSource());
         if (!firstSelected) {
-            System.out.println("Enters");
             checkDoublePieceSelected();
         }
         futureSpots = new ArrayList<Piece>();
         futurePositions = new ArrayList<>(4);
         firstSelected = false;
         
-        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece);
+        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true);
+        System.out.println("Ended");
+        System.out.println();
 
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
@@ -95,7 +96,7 @@ public class Pieces extends Pane{
             blackPieces[i].setLayoutX(CheckersMisc.position(blackPieces[i].getXPosition()));
             blackPieces[i].setLayoutY(CheckersMisc.position(blackPieces[i].getYPosition()));
         }
-
+        CheckersMisc.resetPlayers();
         update();
     }
 

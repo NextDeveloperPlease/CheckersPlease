@@ -12,6 +12,7 @@ public class CheckersMisc {
     public static final double displacementVariable = 87.0;
     public static int[][][][] locationHistory;
     public static boolean redTurn;
+    public static ArrayList<int[]> potentialJumpPositions;
 
     public static void initializer() {
         numRed = 12;
@@ -46,6 +47,10 @@ public class CheckersMisc {
      //todo Finish this   
     }
 
+    public static void resetPlayers() {
+        redTurn = true;
+    }
+
     public static void saveSpaces(Piece[] redPieces, Piece[] blackPieces) {
         historyIndex++;
         for (int i = 0; i < 2; i++) {
@@ -59,72 +64,93 @@ public class CheckersMisc {
         }
     }
 
-    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, String color) {
+    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, String color, boolean first) {
         boolean open = true;
+        int spotToPullColor = 0;
+        int colorIndicator = 1;
+        ArrayList<Integer> indexArrayList = new ArrayList<>();
+        if (color.equals("red")) {
+            colorIndicator = 0;
+        }
         for (int index = 0; index < futurePositions.size(); index++) {
             for (int i = 0; i < locationHistory[historyIndex].length; i++) {
                 for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-                    if ((futurePositions.get(index))[0] == 8 || (futurePositions.get(index))[1] == 8 || ((futurePositions.get(index))[0] == locationHistory[historyIndex][i][j][0] && (futurePositions.get(index))[1] == locationHistory[historyIndex][i][j][1])) {
+                    if (((futurePositions.get(index))[0] == locationHistory[historyIndex][i][j][0] && (futurePositions.get(index))[1] == locationHistory[historyIndex][i][j][1])) {
                         open = false;
-                    } 
+                        spotToPullColor = i;
+                    } else if ((futurePositions.get(index))[0] == 8 || (futurePositions.get(index))[1] == 8) {
+                        open = false;
+                    }
                 }
             } 
-            if (open) {
+            if (open && first) {
                 Piece adjPiece = new Piece(handler);
                 adjPiece.setColor(color);
                 adjPiece.setPosition(futurePositions.get(index));
                 futureSpots.add(adjPiece);
-            } else {
-                checkJump(index, futurePositions, handler, futureSpots, color);
+            } else if (((futurePositions.get(index))[0] < 8 && (futurePositions.get(index))[1] < 8) && colorIndicator != spotToPullColor) {
+                indexArrayList.add(index);
             }
             open = true;
         }
+        for (Integer i : indexArrayList) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        checkJump(indexArrayList, futurePositions, handler, futureSpots, color);
+
         
         
         
     }
 
-    public static void checkJump(int index, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color) {
+    public static void checkJump(ArrayList<Integer> indexArrayList, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color) {
+        potentialJumpPositions = new ArrayList<>();
         int[] jumpPosition = new int[2];
         boolean open = true;
-                switch (index) {
-                    case 0:
-                        jumpPosition[0] = (futurePositions.get(index)[0] - 1);
-                        jumpPosition[1] = (futurePositions.get(index)[1] + 1);
-                        break;
-                    case 1:
-                        jumpPosition[0] = (futurePositions.get(index)[0] + 1);
-                        jumpPosition[1] = (futurePositions.get(index)[1] + 1);
-                        break;
-                    case 2:
-                        jumpPosition[0] = (futurePositions.get(index)[0] - 1);
-                        jumpPosition[1] = (futurePositions.get(index)[1] - 1);
-                        break;
-                    case 3:
-                        jumpPosition[0] = (futurePositions.get(index)[0] + 1);
-                        jumpPosition[1] = (futurePositions.get(index)[1] - 1);
-                        break;
+        for (Integer index : indexArrayList) {
+            switch (index) {
+                case 0:
+                    jumpPosition[0] = (futurePositions.get(index)[0] - 1);
+                    jumpPosition[1] = (futurePositions.get(index)[1] + 1);
+                    System.out.println(futurePositions.get(index)[0] + " " + futurePositions.get(index)[1]);
+                    break;
+                case 1:
+                    jumpPosition[0] = (futurePositions.get(index)[0] + 1);
+                    jumpPosition[1] = (futurePositions.get(index)[1] + 1);
+                    System.out.println(futurePositions.get(index)[0] + " " + futurePositions.get(index)[1]);
+                    break;
+                case 2:
+                    jumpPosition[0] = (futurePositions.get(index)[0] - 1);
+                    jumpPosition[1] = (futurePositions.get(index)[1] - 1);
+                    break;
+                case 3:
+                    jumpPosition[0] = (futurePositions.get(index)[0] + 1);
+                    jumpPosition[1] = (futurePositions.get(index)[1] - 1);
+                    break;
+            }
+            for (int i = 0; i < locationHistory[historyIndex].length; i++) {
+                for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
+                    if (jumpPosition[0] > 7 || jumpPosition[1] > 7 || (jumpPosition[0] == locationHistory[historyIndex][i][j][0] && jumpPosition[1] == locationHistory[historyIndex][i][j][1])) {
+                        open = false;
+                        System.out.println(locationHistory[historyIndex][i][j][0] + " " + locationHistory[historyIndex][i][j][1]);
+                    } 
                 }
-                for (int i = 0; i < locationHistory[historyIndex].length; i++) {
-                    for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-                        if (jumpPosition[0] == 8 || jumpPosition[1] == 8 || (jumpPosition[0] == locationHistory[historyIndex][i][j][0] && jumpPosition[1] == locationHistory[historyIndex][i][j][1])) {
-                            open = false;
-                        } 
-                    }
-                }
-                // This works to show one potential spot. It doesn't repeat for the second option.
-                // Also, it shows the potential spot and the next spot that could be selected, rather than check if its a jump or not.
-                // If the spot is open, it displays it.
-                if (open) {
-                    Piece selectedPiece = new Piece(handler);
-                    selectedPiece.setColor(color);
-                    selectedPiece.setPosition(jumpPosition);
-                    futureSpots.add(selectedPiece);
-                    potentialPositions(selectedPiece, futurePositions, futureSpots, handler);
-                }
+            }
+            if (open) {
+                Piece selectedPiece = new Piece(handler);
+                selectedPiece.setColor(color);
+                selectedPiece.setPosition(jumpPosition);
+                futureSpots.add(selectedPiece);
+                potentialPositions(selectedPiece, potentialJumpPositions, futureSpots, handler, false);
+                System.out.println("Entered open");
+            } else {
+                open = true;
+            }
+        }
     }
 
-    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler) {
+    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, boolean first) {
         int[] position = selectedPiece.getPosition();
         int[] checkPosition = new int[2];
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
@@ -168,8 +194,13 @@ public class CheckersMisc {
             checkPosition[1] = position[1] - 1;
             futurePositions.add(3, checkPosition.clone());
         }
-
-        openSpaces(futurePositions, futureSpots, handler, selectedPiece.getColor());
+        System.out.print(futurePositions);
+        for (int[] positions : futurePositions) {
+            System.out.print(" " + positions[0] + " " + positions[1]);
+        }
+        System.out.println();
+        
+        openSpaces(futurePositions, futureSpots, handler, selectedPiece.getColor(), first);
     }
 
     public static int[][][] startPositions() {
