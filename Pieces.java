@@ -5,6 +5,7 @@ import javafx.scene.layout.Pane;
 
 public class Pieces extends Pane{
     private static Piece[] redPieces, blackPieces;
+    public ArrayList<Piece> deletePieces;
     private Piece selectedPiece;
     private boolean firstSelected;
     public ArrayList<Piece> futureSpots;
@@ -55,12 +56,10 @@ public class Pieces extends Pane{
         }
         futureSpots = new ArrayList<Piece>();
         futurePositions = new ArrayList<>(4);
+        deletePieces = new ArrayList<>();
         firstSelected = false;
         
-        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true);
-
-        System.out.println("ended\n");
-
+        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true, deletePieces);
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
         }
@@ -90,7 +89,10 @@ public class Pieces extends Pane{
         for (Piece piece : pieces) {
             if (color == "red") {
                 for (Piece redPiece : redPieces) {
-                    // if redPieces
+                    if (piece.equals(redPiece)) {
+                        redPiece.setDisable(true);
+                        redPiece.setVisible(false);
+                    }
                 }
             }
         }
