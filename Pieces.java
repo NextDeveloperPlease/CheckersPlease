@@ -58,8 +58,8 @@ public class Pieces extends Pane{
         firstSelected = false;
         
         CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true);
-        System.out.println("Ended");
-        System.out.println();
+
+        System.out.println("ended\n");
 
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
@@ -84,6 +84,16 @@ public class Pieces extends Pane{
         CheckersMisc.saveSpaces(redPieces, blackPieces);
         CheckersMisc.switchPlayers();
         firstSelected = true;
+    }
+
+    public void deletePieces(ActionEvent event, Piece[] pieces, String color) {
+        for (Piece piece : pieces) {
+            if (color == "red") {
+                for (Piece redPiece : redPieces) {
+                    // if redPieces
+                }
+            }
+        }
     }
 
     public static void resetPieces() {

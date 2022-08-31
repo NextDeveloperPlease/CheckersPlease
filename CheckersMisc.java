@@ -131,7 +131,7 @@ public class CheckersMisc {
             }
             for (int i = 0; i < locationHistory[historyIndex].length; i++) {
                 for (int j = 0; j < locationHistory[historyIndex][i].length; j++) {
-                    if (jumpPosition[0] > 7 || jumpPosition[1] > 7 || (jumpPosition[0] == locationHistory[historyIndex][i][j][0] && jumpPosition[1] == locationHistory[historyIndex][i][j][1])) {
+                    if (jumpPosition[0] > 7 || jumpPosition[1] > 7 || jumpPosition[0] < 0 || jumpPosition[1] < 0 || (jumpPosition[0] == locationHistory[historyIndex][i][j][0] && jumpPosition[1] == locationHistory[historyIndex][i][j][1])) {
                         open = false;
                         System.out.println(locationHistory[historyIndex][i][j][0] + " " + locationHistory[historyIndex][i][j][1]);
                     } 
