@@ -9,7 +9,7 @@ public class Pieces extends Pane{
     private Piece selectedPiece;
     private boolean firstSelected;
     public ArrayList<Piece> futureSpots;
-    public ArrayList<int[]> futurePositions;
+    public ArrayList<int[]> futurePositions, deleteSpaces;
     
 
 
@@ -57,11 +57,16 @@ public class Pieces extends Pane{
         futureSpots = new ArrayList<Piece>();
         futurePositions = new ArrayList<>(4);
         deletePieces = new ArrayList<>();
+        deleteSpaces = new ArrayList<>();
         firstSelected = false;
         
         CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true, deletePieces);
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
+        }
+
+        for (int i = 0; i < deletePieces.size(); i++) {
+            System.out.println(deletePieces.get(i));
         }
         
     }
@@ -81,6 +86,10 @@ public class Pieces extends Pane{
         }
         selectedPiece.setPosition(((Piece)event.getSource()).getPosition());
         CheckersMisc.saveSpaces(redPieces, blackPieces);
+        // Still no idea on deletePieces.
+        for (int[] spaces : deleteSpaces) {
+            
+        }
         CheckersMisc.switchPlayers();
         firstSelected = true;
     }

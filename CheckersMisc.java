@@ -8,7 +8,7 @@ public class CheckersMisc {
     public static final int[] DEATHSPACE = {9,9};
     public static int numRed;
     public static int numBlack;
-    private static int historyIndex;
+    public static int historyIndex;
     public static final double displacementVariable = 87.0;
     public static int[][][][] locationHistory;
     public static boolean redTurn;
@@ -98,19 +98,19 @@ public class CheckersMisc {
 
     public static Piece pieceAtPosition(int[] position, ArrayList<Piece> futureSpots) {
         Piece returnSpot = null;
+        System.out.println(futureSpots.size());
         for (Piece spot : futureSpots) {
             if (spot.getPosition()[0] == position[0] && spot.getPosition()[1] == position[1]) {
-                // Returns null everytime. Don't know why.
                 returnSpot = spot;
             }
         }
+        System.out.println();
         return returnSpot;
     }
 
     public static void checkJump(ArrayList<Integer> indexArrayList, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color, ArrayList<Piece> deletePieces) {
         potentialJumpPositions = new ArrayList<>();
         int[] jumpPosition = new int[2];
-        
         boolean open = true;
         for (Integer index : indexArrayList) {
             switch (index) {
@@ -140,9 +140,6 @@ public class CheckersMisc {
             }
             if (open) {
                 Piece selectedPiece = new Piece(handler);
-
-                deletePieces.add(pieceAtPosition(futurePositions.get(index), futureSpots));
-                System.out.println(deletePieces);
 
                 selectedPiece.setColor(color);
                 selectedPiece.setPosition(jumpPosition);
@@ -179,7 +176,6 @@ public class CheckersMisc {
         } else if (selectedPiece.getColor().equals("black") && !CheckersMisc.redTurn) {
             
             if (selectedPiece.getKingship()) {
-                // issue with checkPosition being added to the ArrayList using a reference instead of a deep copy
                 checkPosition[0] = position[0] - 1;
                 checkPosition[1] = position[1] + 1;
                 futurePositions.add(0, checkPosition.clone());
