@@ -6,9 +6,7 @@ import javafx.event.EventHandler;
 public class CheckersMisc {
     public static final int TOTALPIECES = 12;
     public static final int[] DEATHSPACE = {9,9};
-    public static int numRed;
-    public static int numBlack;
-    public static int historyIndex;
+    public static int numRed, numBlack, historyIndex;
     public static final double displacementVariable = 87.0;
     public static int[][][][] locationHistory;
     public static boolean redTurn;
@@ -19,6 +17,35 @@ public class CheckersMisc {
         numBlack = 12;
         historyIndex = 0;
         redTurn = true;
+    }
+
+    public static void findPieceUsingPosition(ArrayList<int[]> deleteSpaces, ArrayList<Piece> deletePieces, String color) {
+        Piece[] redPieces = Pieces.getPieces()[0];
+        Piece[] blackPieces = Pieces.getPieces()[1];
+        if (deleteSpaces.size() > 0) {
+            System.out.println(deleteSpaces.get(0)[1]);
+        }
+        if (deleteSpaces.size() != 0) {
+            for (int i = 0; i < deleteSpaces.size(); i++) {
+                if (color.equals("black")) {
+                    for (int j = 0; j < 12; j++) {
+                        if (deleteSpaces.get(i)[0] == redPieces[j].getXPosition() && deleteSpaces.get(i)[1] == redPieces[j].getYPosition()) {
+                            deletePieces.add(redPieces[j]);
+                            deleteSpaces.remove(i);
+                        }
+                    }   
+                } else {
+                    for (int j = 0; j < 12; j++) {
+                        if (deleteSpaces.get(i)[0] == blackPieces[j].getXPosition() && deleteSpaces.get(i)[1] == blackPieces[j].getYPosition()) {
+                            deletePieces.add(blackPieces[j]);
+                            deleteSpaces.remove(i);
+                            break;
+                        }
+                    }   
+                }
+            }
+        }
+
     }
 
     public static void setNumPieces(boolean isBlack) {
@@ -96,19 +123,8 @@ public class CheckersMisc {
         checkJump(indexArrayList, futurePositions, handler, futureSpots, color, deleteSpaces, deletePieces);
     }
 
-    public static Piece pieceAtPosition(int[] position, ArrayList<Piece> futureSpots) {
-        Piece returnSpot = null;
-        System.out.println(futureSpots.size());
-        for (Piece spot : futureSpots) {
-            if (spot.getPosition()[0] == position[0] && spot.getPosition()[1] == position[1]) {
-                returnSpot = spot;
-            }
-        }
-        System.out.println();
-        return returnSpot;
-    }
-
     public static void checkJump(ArrayList<Integer> indexArrayList, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color, ArrayList<int[]> deleteSpaces, ArrayList<Piece> deletePieces) {
+        
         potentialJumpPositions = new ArrayList<>();
         int[] jumpPosition = new int[2];
         boolean open = true;
@@ -151,6 +167,16 @@ public class CheckersMisc {
                 open = true;
             }
         }
+
+        for (int i = 0; i < deleteSpaces.size(); i++) {
+            for (int j = i+1; j < deleteSpaces.size(); j++) {
+                if (deleteSpaces.get(i)[0] == deleteSpaces.get(j)[0] && deleteSpaces.get(i)[1] == deleteSpaces.get(j)[1]) {
+                    deleteSpaces.remove(j);
+                }
+            }
+        }
+
+        findPieceUsingPosition(deleteSpaces, deletePieces, color);
     }
 
     public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, boolean first, ArrayList<int[]> deleteSpaces, ArrayList<Piece> deletePieces) {

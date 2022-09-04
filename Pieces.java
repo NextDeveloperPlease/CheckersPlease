@@ -39,6 +39,11 @@ public class Pieces extends Pane{
         
     }
 
+    public static Piece[][] getPieces() {
+        Piece[][] result = {redPieces, blackPieces};
+        return result;
+    }
+
     public static void update() {
         for (int i = 0; i < 12; i++) {
             redPieces[i].setLayoutX(CheckersMisc.position(redPieces[i].getXPosition()));
@@ -83,16 +88,19 @@ public class Pieces extends Pane{
         selectedPiece.setPosition(((Piece)event.getSource()).getPosition());
         CheckersMisc.saveSpaces(redPieces, blackPieces);
 
-        for (int i = 0; i < deleteSpaces.size(); i++) {
-            for (int j = i+1; j < deleteSpaces.size(); j++) {
-                if (deleteSpaces.get(i)[0] == deleteSpaces.get(j)[0] && deleteSpaces.get(i)[1] == deleteSpaces.get(j)[1]) {
-                    deleteSpaces.remove(j);
-                }
-            }
+        // for (int i = 0; i < deleteSpaces.size(); i++) {
+        //     for (int j = i+1; j < deleteSpaces.size(); j++) {
+        //         if (deleteSpaces.get(i)[0] == deleteSpaces.get(j)[0] && deleteSpaces.get(i)[1] == deleteSpaces.get(j)[1]) {
+        //             deleteSpaces.remove(j);
+        //         }
+        //     }
+        // }
+
+        for (Piece piece : deletePieces) {
+            System.out.println(piece.getPosition()[0] + " " + piece.getPosition()[1]);
+            CheckersMisc.pieceKilled(piece);
         }
-        for (int i = 0; i < deleteSpaces.size(); i++) {
-            System.out.println(deleteSpaces.get(i)[0] + " " + deleteSpaces.get(i)[1]);
-        }
+        
         CheckersMisc.switchPlayers();
         firstSelected = true;
     }
