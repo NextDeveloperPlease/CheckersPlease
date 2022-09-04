@@ -64,7 +64,7 @@ public class CheckersMisc {
         }
     }
 
-    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, String color, boolean first, ArrayList<Piece> deletePieces) {
+    public static void openSpaces(ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, String color, boolean first, ArrayList<int[]> deleteSpaces) {
         boolean open = true;
         int spotToPullColor = 0;
         int colorIndicator = 1;
@@ -93,7 +93,7 @@ public class CheckersMisc {
             }
             open = true;
         }
-        checkJump(indexArrayList, futurePositions, handler, futureSpots, color, deletePieces);
+        checkJump(indexArrayList, futurePositions, handler, futureSpots, color, deleteSpaces);
     }
 
     public static Piece pieceAtPosition(int[] position, ArrayList<Piece> futureSpots) {
@@ -108,7 +108,7 @@ public class CheckersMisc {
         return returnSpot;
     }
 
-    public static void checkJump(ArrayList<Integer> indexArrayList, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color, ArrayList<Piece> deletePieces) {
+    public static void checkJump(ArrayList<Integer> indexArrayList, ArrayList<int[]> futurePositions, EventHandler<ActionEvent> handler, ArrayList<Piece> futureSpots, String color, ArrayList<int[]> deleteSpaces) {
         potentialJumpPositions = new ArrayList<>();
         int[] jumpPosition = new int[2];
         boolean open = true;
@@ -141,17 +141,19 @@ public class CheckersMisc {
             if (open) {
                 Piece selectedPiece = new Piece(handler);
 
+                deleteSpaces.add(futurePositions.get(index).clone());
+
                 selectedPiece.setColor(color);
                 selectedPiece.setPosition(jumpPosition);
                 futureSpots.add(selectedPiece);
-                potentialPositions(selectedPiece, potentialJumpPositions, futureSpots, handler, false, deletePieces);
+                potentialPositions(selectedPiece, potentialJumpPositions, futureSpots, handler, false, deleteSpaces);
             } else {
                 open = true;
             }
         }
     }
 
-    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, boolean first, ArrayList<Piece> deletePieces) {
+    public static void potentialPositions(Piece selectedPiece, ArrayList<int[]> futurePositions, ArrayList<Piece> futureSpots, EventHandler<ActionEvent> handler, boolean first, ArrayList<int[]> deleteSpaces) {
         int[] position = selectedPiece.getPosition();
         int[] checkPosition = new int[2];
         if (selectedPiece.getColor().equals("red") && CheckersMisc.redTurn) {
@@ -194,7 +196,7 @@ public class CheckersMisc {
             checkPosition[1] = position[1] - 1;
             futurePositions.add(3, checkPosition.clone());
         }
-        openSpaces(futurePositions, futureSpots, handler, selectedPiece.getColor(), first, deletePieces);
+        openSpaces(futurePositions, futureSpots, handler, selectedPiece.getColor(), first, deleteSpaces);
     }
 
     public static int[][][] startPositions() {

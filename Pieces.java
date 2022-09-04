@@ -60,13 +60,9 @@ public class Pieces extends Pane{
         deleteSpaces = new ArrayList<>();
         firstSelected = false;
         
-        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true, deletePieces);
+        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true, deleteSpaces);
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
-        }
-
-        for (int i = 0; i < deletePieces.size(); i++) {
-            System.out.println(deletePieces.get(i));
         }
         
     }
@@ -86,26 +82,21 @@ public class Pieces extends Pane{
         }
         selectedPiece.setPosition(((Piece)event.getSource()).getPosition());
         CheckersMisc.saveSpaces(redPieces, blackPieces);
-        // Still no idea on deletePieces.
-        for (int[] spaces : deleteSpaces) {
-            
+
+        for (int i = 0; i < deleteSpaces.size(); i++) {
+            for (int j = i+1; j < deleteSpaces.size(); j++) {
+                if (deleteSpaces.get(i)[0] == deleteSpaces.get(j)[0] && deleteSpaces.get(i)[1] == deleteSpaces.get(j)[1]) {
+                    deleteSpaces.remove(j);
+                }
+            }
+        }
+        for (int i = 0; i < deleteSpaces.size(); i++) {
+            System.out.println(deleteSpaces.get(i)[0] + " " + deleteSpaces.get(i)[1]);
         }
         CheckersMisc.switchPlayers();
         firstSelected = true;
     }
-
-    public void deletePieces(ActionEvent event, Piece[] pieces, String color) {
-        for (Piece piece : pieces) {
-            if (color == "red") {
-                for (Piece redPiece : redPieces) {
-                    if (piece.equals(redPiece)) {
-                        redPiece.setDisable(true);
-                        redPiece.setVisible(false);
-                    }
-                }
-            }
-        }
-    }
+    
 
     public static void resetPieces() {
         for (int i = 0; i < redPieces.length; i++) {
@@ -117,8 +108,28 @@ public class Pieces extends Pane{
             blackPieces[i].setLayoutX(CheckersMisc.position(blackPieces[i].getXPosition()));
             blackPieces[i].setLayoutY(CheckersMisc.position(blackPieces[i].getYPosition()));
         }
+        
         CheckersMisc.resetPlayers();
         update();
     }
+    
+    public static void resetPieces(Pieces pieces) {
+        for (int i = 0; i < redPieces.length; i++) {
+            redPieces[i].setPosition(CheckersMisc.startPositions()[0][i]);
+            redPieces[i].setLayoutX(CheckersMisc.position(redPieces[i].getXPosition()));
+            redPieces[i].setLayoutY(CheckersMisc.position(redPieces[i].getYPosition()));
+
+            blackPieces[i].setPosition(CheckersMisc.startPositions()[1][i]);
+            blackPieces[i].setLayoutX(CheckersMisc.position(blackPieces[i].getXPosition()));
+            blackPieces[i].setLayoutY(CheckersMisc.position(blackPieces[i].getYPosition()));
+        }
+        for (int i = 0; i < 10; i++) {
+            pieces.checkDoublePieceSelected();
+        }
+
+        CheckersMisc.resetPlayers();
+        update();
+    }
+
 
 }
