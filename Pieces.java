@@ -60,7 +60,7 @@ public class Pieces extends Pane{
         deleteSpaces = new ArrayList<>();
         firstSelected = false;
         
-        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true, deleteSpaces);
+        CheckersMisc.potentialPositions(selectedPiece, futurePositions, futureSpots, this::movePiece, true, deleteSpaces, deletePieces);
         for (Piece piece : futureSpots) {
             this.getChildren().add(piece);
         }
@@ -114,21 +114,7 @@ public class Pieces extends Pane{
     }
     
     public static void resetPieces(Pieces pieces) {
-        for (int i = 0; i < redPieces.length; i++) {
-            redPieces[i].setPosition(CheckersMisc.startPositions()[0][i]);
-            redPieces[i].setLayoutX(CheckersMisc.position(redPieces[i].getXPosition()));
-            redPieces[i].setLayoutY(CheckersMisc.position(redPieces[i].getYPosition()));
-
-            blackPieces[i].setPosition(CheckersMisc.startPositions()[1][i]);
-            blackPieces[i].setLayoutX(CheckersMisc.position(blackPieces[i].getXPosition()));
-            blackPieces[i].setLayoutY(CheckersMisc.position(blackPieces[i].getYPosition()));
-        }
-        for (int i = 0; i < 10; i++) {
-            pieces.checkDoublePieceSelected();
-        }
-
-        CheckersMisc.resetPlayers();
-        update();
+        pieces.checkDoublePieceSelected();
     }
 
 
