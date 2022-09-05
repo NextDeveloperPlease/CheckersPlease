@@ -14,15 +14,15 @@ public class SideFeaturePane extends Pane {
     // Add progress and labels into group
     // Add buttons into a group
 
-        int numBlack, numRed;
-        ProgressBar winning;
-        NumPieces pieces;
+        static int numBlack, numRed;
+        static ProgressBar winning;
+        static NumPieces pieces;
         NumWins wins;
         public Button startOverButton, quitButton, mainMenuButton;
 
     public SideFeaturePane() {
-        numBlack = CheckersMisc.numBlack;
-        numRed = CheckersMisc.numRed;
+        numBlack = 12;
+        numRed = 12;
 
         Group scoreGroup, buttonGroup;
 
@@ -79,11 +79,11 @@ public class SideFeaturePane extends Pane {
         mainMenuButton.setOnAction(handler);
     }
 
-    public void update() {
-        numBlack = CheckersMisc.numBlack;
-        numRed = CheckersMisc.numRed;
+    public static void update() {
+        numBlack = ProcessWin.p2Pieces;
+        numRed = ProcessWin.p1Pieces;
         winning.setProgress((numRed * 1.0) / (numRed + numBlack));
-        pieces.update();
+        // pieces.update();
     }
 
     public Button getstartOverButton() {

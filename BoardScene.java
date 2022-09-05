@@ -16,27 +16,9 @@ public class BoardScene extends Scene {
         side = new SideFeaturePane();
         side.setLayoutX(720);
         side.setLayoutY(25);
+        new ProcessWin();
         ((Group)this.getRoot()).getChildren().addAll(board, pieces, side);
     }
-
-    // public void processPieceDestroyed(ActionEvent event) {
-    //     String color = ((Piece)event.getSource()).getColor();
-    //     ((Piece)event.getSource()).setVisible(false);
-
-    //     if (color.equals("red")) {
-    //         Pieces.setNumPieces(false);
-    //     } else {
-    //         Pieces.setNumPieces(true);
-    //     }
-
-    //     side.update();
-    // }
-
-    // Will have to adjust once king/queen pieces are implemented
-
-    // add a logic system to detect if a piece can be jumped
-    // redo processPieceDestroyed to remove the piece only if jumped
-    // use this logic to call processPieceDestroyed
 
     public SideFeaturePane getSideFeatures() {
         return side;
@@ -46,7 +28,7 @@ public class BoardScene extends Scene {
         Pieces.resetPieces();
         Pieces.resetPieces(pieces);
         ProcessWin.resetWins();
-        side.update();
+        SideFeaturePane.update();
         CheckersMisc.redTurn = true;
     }
 

@@ -4,8 +4,8 @@ import javafx.scene.text.Font;
 
 public class NumPieces extends Pane {
 
-    int numRed, numBlack;
-    Label p1, p2;
+    static int numRed, numBlack;
+    static Label p1, p2;
 
     public NumPieces() {
         numRed = CheckersMisc.numRed;
@@ -24,9 +24,9 @@ public class NumPieces extends Pane {
         this.getChildren().addAll(p1, p2);
     }
 
-    public void update() {
-        numRed = CheckersMisc.numRed;
-        numBlack = CheckersMisc.numBlack;
+    public static void update() {
+        numRed = ProcessWin.p1Pieces;
+        numBlack = ProcessWin.p2Pieces;
 
         p1.setText("Pieces: " + numRed);
         p2.setText("Pieces: " + numBlack);

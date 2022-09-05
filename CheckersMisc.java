@@ -23,7 +23,6 @@ public class CheckersMisc {
         Piece[] redPieces = Pieces.getPieces()[0];
         Piece[] blackPieces = Pieces.getPieces()[1];
         if (deleteSpaces.size() > 0) {
-            System.out.println(deleteSpaces.get(0)[1]);
         }
         if (deleteSpaces.size() != 0) {
             for (int i = 0; i < deleteSpaces.size(); i++) {
@@ -32,6 +31,11 @@ public class CheckersMisc {
                         if (deleteSpaces.get(i)[0] == redPieces[j].getXPosition() && deleteSpaces.get(i)[1] == redPieces[j].getYPosition()) {
                             deletePieces.add(redPieces[j]);
                             deleteSpaces.remove(i);
+                            // if (deleteSpaces.size() == 0) {
+                            //     i = deleteSpaces.size();
+                            //     j = 11;
+                            // }
+                            break;
                         }
                     }   
                 } else {
@@ -39,6 +43,10 @@ public class CheckersMisc {
                         if (deleteSpaces.get(i)[0] == blackPieces[j].getXPosition() && deleteSpaces.get(i)[1] == blackPieces[j].getYPosition()) {
                             deletePieces.add(blackPieces[j]);
                             deleteSpaces.remove(i);
+                            // if (deleteSpaces.size() == 0) {
+                            //     i = deleteSpaces.size();
+                            //     j = 11;
+                            // }
                             break;
                         }
                     }   
@@ -76,6 +84,7 @@ public class CheckersMisc {
 
     public static void resetPlayers() {
         redTurn = true;
+        historyIndex = 0;
     }
 
     public static void saveSpaces(Piece[] redPieces, Piece[] blackPieces) {
@@ -243,9 +252,13 @@ public class CheckersMisc {
         return start;
     }
 
-    public static void pieceKilled(Piece piece) {
+    public static void pieceKilled(Piece piece, Piece[] redPieces, Piece[] blackPieces) {
         piece.setPosition(DEATHSPACE);
         piece.setDisable(true);
         piece.setVisible(false);
+        saveSpaces(redPieces, blackPieces);
+        ProcessWin.getTotalPiecesLeft();
+        ProcessWin.update();
+        SideFeaturePane.update();
     }
 }
