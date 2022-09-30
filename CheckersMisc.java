@@ -13,8 +13,8 @@ public class CheckersMisc {
     public static ArrayList<int[]> potentialJumpPositions;
 
     public static void initializer() {
-        numRed = 12;
-        numBlack = 12;
+        numRed = TOTALPIECES;
+        numBlack = TOTALPIECES;
         historyIndex = 0;
         redTurn = true;
     }
@@ -31,10 +31,6 @@ public class CheckersMisc {
                         if (deleteSpaces.get(i)[0] == redPieces[j].getXPosition() && deleteSpaces.get(i)[1] == redPieces[j].getYPosition()) {
                             deletePieces.add(redPieces[j]);
                             deleteSpaces.remove(i);
-                            // if (deleteSpaces.size() == 0) {
-                            //     i = deleteSpaces.size();
-                            //     j = 11;
-                            // }
                             break;
                         }
                     }   
@@ -43,10 +39,6 @@ public class CheckersMisc {
                         if (deleteSpaces.get(i)[0] == blackPieces[j].getXPosition() && deleteSpaces.get(i)[1] == blackPieces[j].getYPosition()) {
                             deletePieces.add(blackPieces[j]);
                             deleteSpaces.remove(i);
-                            // if (deleteSpaces.size() == 0) {
-                            //     i = deleteSpaces.size();
-                            //     j = 11;
-                            // }
                             break;
                         }
                     }   
@@ -79,7 +71,6 @@ public class CheckersMisc {
         } else {
             redTurn = true;
         }
-     //todo Finish this   
     }
 
     public static void resetPlayers() {
@@ -257,7 +248,8 @@ public class CheckersMisc {
         piece.setDisable(true);
         piece.setVisible(false);
         saveSpaces(redPieces, blackPieces);
-        ProcessWin.getTotalPiecesLeft();
+        // ProcessWin.getTotalPiecesLeft();
+        ProcessWin.removePiece(piece.getColor());
         ProcessWin.update();
         SideFeaturePane.update();
     }

@@ -12,7 +12,6 @@ public class BoardScene extends Scene {
         CheckersMisc.initializer();
         Board board = new Board();
         pieces = new Pieces();
-        // spots = pieces.getSpots();
         side = new SideFeaturePane();
         side.setLayoutX(720);
         side.setLayoutY(25);
@@ -27,6 +26,7 @@ public class BoardScene extends Scene {
     public void resetBoard() {
         Pieces.resetPieces();
         Pieces.resetPieces(pieces);
+        ProcessWin.resetPieces();
         ProcessWin.resetWins();
         SideFeaturePane.update();
         CheckersMisc.redTurn = true;

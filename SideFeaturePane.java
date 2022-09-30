@@ -9,10 +9,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class SideFeaturePane extends Pane {
-    // This is all the features shown on the side
-    // Do this in a Pane
-    // Add progress and labels into group
-    // Add buttons into a group
 
         static int numBlack, numRed;
         static ProgressBar winning;
@@ -83,7 +79,6 @@ public class SideFeaturePane extends Pane {
         numBlack = ProcessWin.p2Pieces;
         numRed = ProcessWin.p1Pieces;
         winning.setProgress((numRed * 1.0) / (numRed + numBlack));
-        // pieces.update();
     }
 
     public Button getstartOverButton() {

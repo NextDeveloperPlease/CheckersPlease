@@ -113,6 +113,7 @@ public class Pieces extends Pane{
         }
         
         CheckersMisc.resetPlayers();
+        CheckersMisc.initializer();
         update();
     }
     
